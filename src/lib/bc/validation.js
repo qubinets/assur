@@ -71,10 +71,11 @@ function isValidBlock(newBlock, type = 0) {
     logger.warn('candidate block has incomplete child headers references');
     //return false
   }
-  let btcHeight = newBlock.getBlockchainHeaders().getBtcList()[0].getHeight();
-  if (btcHeight > 548762) {
-    logger.warn('rejecting shitty btc block with height=' + btcHeight);
-    return false;
+  let bcheight = newBlock.getBlockchainHeaders().getBtcList()[0].getHeight()
+  let bctimestamp = newBlock.getBlockchainHeaders().getBtcList()[0].getTimestamp()
+  if (new BN(bcheight).gte(new BN(553448)) === true || (bcheight === 548762 && new BN(bctimestamp).lt(new BN('1539416495000')) === true)) {
+    logger.info('REJECT BAD BC BLOCK')
+    return false
   }
   let ethHeight = newBlock.getBlockchainHeaders().getEthList()[0].getHeight();
   if (ethHeight > 6789430) {
